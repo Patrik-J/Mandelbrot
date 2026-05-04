@@ -1,27 +1,31 @@
 #include "mandelbrot.hpp"
 
-MandelbrotSet::MandelbrotSet(std::complex<double> c) {
-    this->c = c;
+MandelbrotSet::MandelbrotSet() {
 };
 
-int MandelbrotSet::testNumber(std::complex<double> z) {
-    
-    std::complex<double> _z = &z;
+int MandelbrotSet::testNumber(std::complex<double> &c)
+{
+
+    std::complex<double> z_n = 0;
     int iter = 0;
-    while (abs(_z) < this->max && iter < this->max_iters) {
-        _z *= _z
-        _z += this->c;
+
+    while (abs(z_n) < this->max && iter < this->max_iters)
+    {
+        z_n = z_n * z_n + c;
         iter++;
     }
-    if (iter == 0) iter = 1;
+    if (iter == 0)
+        iter = 1;
 
     return iter;
 };
 
-void MandelbrotSet::setMaxVal(double max) {
+void MandelbrotSet::setMaxVal(double max)
+{
     this->max = max;
 };
 
-void MandelbrotSet::setMaxIters(int iters) {
+void MandelbrotSet::setMaxIters(int iters)
+{
     this->max_iters = iters;
 };
