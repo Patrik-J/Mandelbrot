@@ -383,10 +383,8 @@ void TextField::draw()
 
     if (mouseOnText || this->fieldActivated)
         DrawRectangleLinesEx(this->textBox, this->border_width, this->borderHoverColor);
-    // DrawRectangleLines((int)this->textBox.x, (int)this->textBox.y, (int)this->textBox.width, (int)this->textBox.height, RED);
     else
         DrawRectangleLinesEx(this->textBox, this->border_width, this->borderColor);
-    // DrawRectangleLines((int)this->textBox.x, (int)this->textBox.y, (int)this->textBox.width, (int)this->textBox.height, this->borderColor);
 
     if (this->fieldActivated)
     {
@@ -444,15 +442,49 @@ void TextLabel::draw()
 int PopUpWindow(Rectangle box, const char *msg, const char *title, int type)
 {
     int result = -1;
-    DrawRectangleRec(box, GRAY);
-    TextButton ok = TextButton();
+    int width = 150, height = 50;
+
+    // text message
+    Vector2 textSize = MeasureTextEx(GetFontDefault(), msg, 30, 2.0);
+    if (textSize.x > box.width)
+    {
+        box.x = box.x + box.width / 2.0f;
+        box.width = textSize.x + 40.0f;
+        box.x = box.x - box.width / 2.0f;
+    }
+    DrawRectangleRec(box, RAYWHITE);
+
+    Vector2 textPos = {
+        box.x + (box.width / 2.0f) - (textSize.x / 2.0f),
+        box.y + (box.height / 2.0f) - (textSize.y / 2.0f)};
+
+    DrawTextEx(GetFontDefault(), msg, textPos, 30, 2.0, BLACK);
+
+    // close button and title bar
+    Vector2 titleSize = MeasureTextEx(GetFontDefault(), title, 26, 2.0);
+    DrawRectangle(box.x, box.y, box.width, titleSize.y * 1.3, GRAY);
+    DrawText(title, box.x + 0.1 * titleSize.x, box.y + 0.15 * titleSize.y, 26, BLACK);
+    TextButton close = TextButton(titleSize.y * 1.3, titleSize.y * 1.3);
+    close.setText("X");
+    close.setFont(26);
+    close.makeHoverable(BLACK, WHITE);
+    close.setBackgroundColor(RED);
+    close.setTextColor(WHITE);
+    close.setPosition(box.x + box.width - titleSize.y * 1.3 / 2, box.y + titleSize.y * 1.3 / 2);
+    close.setAction([&]()
+                    { result = 1; });
+    close.draw();
+
+    // confirm button
+    TextButton ok = TextButton(width, height);
     ok.setText("Ok");
     ok.setAction([&]()
                  { result = 1; });
     ok.setFont(26);
-    ok.setTextColor(BLACK);
-    ok.setBackgroundColor(RAYWHITE);
-    ok.makeHoverable(GRAY, BLACK);
+    ok.setTextColor(WHITE);
+    ok.setBackgroundColor(GRAY);
+    ok.makeHoverable(BLACK, WHITE);
+    ok.setPosition(box.x + box.width / 2, box.y + 3 * box.height / 4);
     ok.draw();
 
     return result;
@@ -460,18 +492,8 @@ int PopUpWindow(Rectangle box, const char *msg, const char *title, int type)
 
 double stringToDouble(const char *string)
 {
-    // try
-    // {
     double value = std::stod(string);
     return value;
-    // }
-    // catch (std::exception e)
-    // {
-    //     Rectangle rec{
-
-    //     };
-    //     PopUpWindow();
-    // }
 };
 
 #endif

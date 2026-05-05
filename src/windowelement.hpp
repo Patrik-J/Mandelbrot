@@ -5,14 +5,15 @@
 #include <functional>
 #include <cstring>
 #include <string>
+#include <iostream>
 
 #define MAX_TEXTFIELD_LEN 128
 #define STRING_TERMINATE '\0'
 #define STRING_NEW_LINE '\n'
 #define CURSOR_TIME 0.5
 
-#define DEFAULT_POP_UP_WIDTH 300
-#define DEFAULT_POP_UP_HEIGHT 200
+#define DEFAULT_POP_UP_WIDTH 400
+#define DEFAULT_POP_UP_HEIGHT 300
 
 class WindowElement
 {
