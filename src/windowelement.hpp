@@ -4,11 +4,15 @@
 #include <raylib.h>
 #include <functional>
 #include <cstring>
+#include <string>
 
 #define MAX_TEXTFIELD_LEN 128
 #define STRING_TERMINATE '\0'
 #define STRING_NEW_LINE '\n'
 #define CURSOR_TIME 0.5
+
+#define DEFAULT_POP_UP_WIDTH 300
+#define DEFAULT_POP_UP_HEIGHT 200
 
 class WindowElement
 {
@@ -72,6 +76,8 @@ public:
     void setColor(Color textColor = BLACK, Color bgColor = GRAY, Color borderColor = BLACK, Color borderHoverColor = BLACK);
     void draw() override;
     void blinkCursor(bool blink = true, char c = '|');
+    void setBorderWidth(int width);
+    void setNumberField(bool onlyNumbers = true);
 
 private:
     char *text;
@@ -83,6 +89,8 @@ private:
     bool blinking_cursor = false;
     char cursor_char;
     bool show_cursor = false;
+    int border_width = 1;
+    bool only_numbers = true;
 
     float time_since_last_frame = 0;
 
@@ -111,5 +119,16 @@ private:
     Color bgColor;
     int padding = 5;
 };
+
+enum MSG_TYPE
+{
+    ERROR,
+    INFO,
+    ASK
+};
+
+int PopUpWindow(Rectangle box, const char *msg, const char *title, int type);
+
+double stringToDouble(const char *string);
 
 #endif

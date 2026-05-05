@@ -174,10 +174,19 @@ TextField::TextField(int width, int height)
 void TextField::readUserInput()
 {
     int key = GetCharPressed();
-
     while (key > 0)
     {
-        this->writeUserInput((char)key);
+        if (this->only_numbers)
+        {
+            if ((key >= 48 && key <= 57) || (key == 46))
+            {
+                this->writeUserInput((char)key);
+            }
+        }
+        else
+        {
+            this->writeUserInput((char)key);
+        }
         key = GetCharPressed();
     }
 
@@ -355,6 +364,11 @@ void TextField::setCharLimit(int lim)
     this->max_len = lim;
 };
 
+void TextField::setNumberField(bool onlyNumbers)
+{
+    this->only_numbers = onlyNumbers;
+};
+
 void TextField::draw()
 {
     this->textBox = Rectangle{
@@ -363,20 +377,27 @@ void TextField::draw()
         (float)this->width,
         (float)this->height};
 
-    DrawRectangleRec(textBox, LIGHTGRAY);
+    DrawRectangleRec(textBox, this->bgColor);
     bool mouseOnText = this->mouseHoveringOnField();
     this->checkActivation();
 
     if (mouseOnText || this->fieldActivated)
-        DrawRectangleLines((int)this->textBox.x, (int)this->textBox.y, (int)this->textBox.width, (int)this->textBox.height, RED);
+        DrawRectangleLinesEx(this->textBox, this->border_width, this->borderHoverColor);
+    // DrawRectangleLines((int)this->textBox.x, (int)this->textBox.y, (int)this->textBox.width, (int)this->textBox.height, RED);
     else
-        DrawRectangleLines((int)this->textBox.x, (int)this->textBox.y, (int)this->textBox.width, (int)this->textBox.height, DARKGRAY);
+        DrawRectangleLinesEx(this->textBox, this->border_width, this->borderColor);
+    // DrawRectangleLines((int)this->textBox.x, (int)this->textBox.y, (int)this->textBox.width, (int)this->textBox.height, this->borderColor);
 
     if (this->fieldActivated)
     {
         this->readUserInput();
     }
     this->writeTextToTextField();
+};
+
+void TextField::setBorderWidth(int width)
+{
+    this->border_width = width;
 };
 
 void TextField::blinkCursor(bool blink, char c)
@@ -418,6 +439,39 @@ void TextLabel::draw()
         (float)(this->x - textSize.x / 2),
         (float)(this->y - textSize.y / 2)};
     DrawTextEx(this->font, this->text, pos, this->fontSize, this->spacing, this->textColor);
+};
+
+int PopUpWindow(Rectangle box, const char *msg, const char *title, int type)
+{
+    int result = -1;
+    DrawRectangleRec(box, GRAY);
+    TextButton ok = TextButton();
+    ok.setText("Ok");
+    ok.setAction([&]()
+                 { result = 1; });
+    ok.setFont(26);
+    ok.setTextColor(BLACK);
+    ok.setBackgroundColor(RAYWHITE);
+    ok.makeHoverable(GRAY, BLACK);
+    ok.draw();
+
+    return result;
+};
+
+double stringToDouble(const char *string)
+{
+    // try
+    // {
+    double value = std::stod(string);
+    return value;
+    // }
+    // catch (std::exception e)
+    // {
+    //     Rectangle rec{
+
+    //     };
+    //     PopUpWindow();
+    // }
 };
 
 #endif
