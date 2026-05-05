@@ -7,7 +7,7 @@ void MandelbrotGenerator::setParams(double *params)
     this->iters = int(params[0]);
     this->r = params[1];
     this->g = params[2];
-    this->g = params[3];
+    this->b = params[3];
     this->max_abs = params[4];
     this->min_x = params[5];
     this->max_x = params[6];
@@ -36,18 +36,8 @@ void MandelbrotGenerator::setPath(std::string directory, std::string filename)
 int MandelbrotGenerator::generate()
 {
     this->img = cv::Mat(this->height, this->width, CV_8UC3, cv::Scalar(0, 0, 0));
-    // std::cout << this->directory << std::endl;
-    // std::cout << "Directory: " << this->directory << std::endl;
-    // std::cout << "Directory: " << std::string(this->directory) << std::endl;
+    std::string path = this->directory + "/" + this->filename + ".jpg";
 
-    std::string path = this->directory + "\\" + this->filename + ".jpg";
-    // std::cout << "Saving to: " << path << std::endl;
-    // cv::imwrite(path, this->img);
-    // if (!cv::imwrite(path, this->img))
-    // {
-    //     std::cerr << "Failed to write image" << std::endl;
-    // }
-    // cv::imwrite(std::string(this->directory) + "\\test.jpg", this->img);
     MandelbrotSet mbs = MandelbrotSet();
     mbs.setMaxIters(this->iters);
     mbs.setMaxVal(this->max_abs);
@@ -62,8 +52,7 @@ int MandelbrotGenerator::generate()
         {
             real = this->min_x + (this->max_x - this->min_x) * i / double(this->width);
             imag = this->min_y + (this->max_y - this->min_y) * j / double(this->height);
-            // c =  + this->min_y + (this->max_y - this->min_y) * j / double(this->height);
-            c = (real, imag);
+            c = std::complex<double>(real, imag);
             iters = mbs.testNumber(c);
 
             if (iters == this->iters)
