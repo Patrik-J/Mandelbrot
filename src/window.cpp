@@ -21,7 +21,7 @@ Window::Window(int width, int height, int fps, const char *title)
         if (this->create_mandelbrot)
         {
             this->create_mandelbrot = false;
-            ImageGenerator ig = ImageGenerator();
+            MandelbrotGenerator ig = MandelbrotGenerator();
             ig.setParams(this->params + 2);
             ig.setSize(this->params[0], this->params[1]);
             std::vector<std::string> path = AskForDirectoryFilename();
@@ -29,8 +29,8 @@ Window::Window(int width, int height, int fps, const char *title)
             {
                 std::cout << path[0].c_str() << std::endl;
                 std::cout << path[1].c_str() << std::endl;
-                // ig.setPath(path[0].c_str(), path[1].c_str());
-                // ig.generate();
+                ig.setPath(path[0].c_str(), path[1].c_str());
+                ig.generate();
             }
         };
         BeginDrawing();
@@ -223,7 +223,7 @@ void Window::SettingsScreen()
     ymaxField.draw();
 
     // width
-    TextLabel widthLabel = TextLabel("y Max: ");
+    TextLabel widthLabel = TextLabel("Image Width: ");
     widthLabel.setFont(30);
     widthLabel.setPosition(int(0.3 * this->width), int(0.65 * this->height));
     widthLabel.setTextColor(WHITE);
@@ -239,7 +239,7 @@ void Window::SettingsScreen()
     widthField.draw();
 
     // height
-    TextLabel heightLabel = TextLabel("y Max: ");
+    TextLabel heightLabel = TextLabel("Image Height: ");
     heightLabel.setFont(30);
     heightLabel.setPosition(int(0.3 * this->width), int(0.7 * this->height));
     heightLabel.setTextColor(WHITE);

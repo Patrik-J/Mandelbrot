@@ -1,14 +1,14 @@
 #ifndef window_hpp
 #define window_hpp
 
-#include <raylib.h>
+// #include <raylib.h>
 #include <math.h>
 #include <iostream>
 #include <vector>
+#include <filesystem>
 
 #include "windowelement.hpp"
-#include "imagegenerator.hpp"
-#include <filesystem>
+#include "mandelbrotgenerator.hpp"
 // #include "portable-file-dialogs.h"
 
 inline const int DEFAULT_SCREEN_WIDTH = 1000;
