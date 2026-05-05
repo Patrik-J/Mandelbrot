@@ -78,7 +78,7 @@ public:
     void draw() override;
     void blinkCursor(bool blink = true, char c = '|');
     void setBorderWidth(int width);
-    void setNumberField(bool onlyNumbers = true);
+    void setNumberField(bool onlyNumbers = true, bool allowNegatives = true);
 
 private:
     char *text;
@@ -92,6 +92,7 @@ private:
     bool show_cursor = false;
     int border_width = 1;
     bool only_numbers = true;
+    bool allow_negatives = true;
 
     float time_since_last_frame = 0;
 

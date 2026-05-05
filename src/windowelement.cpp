@@ -182,6 +182,10 @@ void TextField::readUserInput()
             {
                 this->writeUserInput((char)key);
             }
+            else if (this->allow_negatives && key == 45)
+            {
+                this->writeUserInput((char)key);
+            }
         }
         else
         {
@@ -364,9 +368,10 @@ void TextField::setCharLimit(int lim)
     this->max_len = lim;
 };
 
-void TextField::setNumberField(bool onlyNumbers)
+void TextField::setNumberField(bool onlyNumbers, bool allowNegatives)
 {
     this->only_numbers = onlyNumbers;
+    this->allow_negatives = allowNegatives;
 };
 
 void TextField::draw()
