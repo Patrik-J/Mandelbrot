@@ -1,13 +1,17 @@
-#ifndef imagegenerator_hpp
-#define imagegenerator_hpp
+#ifndef mandelbrotgenerator_hpp
+#define mandelbrotgenerator_hpp
 
+#include <opencv2/opencv.hpp>
+#include <opencv2/imgcodecs.hpp>
 #include "mandelbrot.hpp"
-// #include <opencv2/opencv.hpp>
+#include <string>
 
-class ImageGenerator
+// using namespace cv;
+
+class MandelbrotGenerator
 {
 public:
-    ImageGenerator();
+    MandelbrotGenerator();
     void setParams(double *params);
     void setSize(int width, int height);
     void setPath(char *directory, char *filename);
@@ -19,12 +23,12 @@ private:
     int iters;
     double r, g, b;
     int width, height;
-    const char *directory, *filename;
+    std::string directory, filename;
     double max_abs;
     double min_x, max_x;
     double min_y, max_y;
 
-    // cv::Mat img;
+    cv::Mat img;
 };
 
 #endif
