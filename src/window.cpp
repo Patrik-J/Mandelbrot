@@ -27,10 +27,10 @@ Window::Window(int width, int height, int fps, const char *title)
             std::vector<std::string> path = AskForDirectoryFilename();
             if (!path.empty())
             {
-                std::cout << path[0].c_str() << std::endl;
-                std::cout << path[1].c_str() << std::endl;
-                ig.setPath(path[0].c_str(), path[1].c_str());
+                ig.setPath(path[0], path[1]);
                 ig.generate();
+                this->last_img = LoadTexture(DirectoryFilenameToPNGPath(path[0], path[1]).c_str());
+                this->screen_index = IMAGE_PAGE;
             }
         };
         BeginDrawing();
@@ -298,8 +298,15 @@ void Window::SettingsScreen()
     }
 };
 
-void Window::ImageScreen() {
-
+void Window::ImageScreen()
+{
+    ClearBackground(BLACK);
+    this->checkForResize();
+    if (IsKeyPressed(KEY_ESCAPE))
+    {
+        this->screen_index = SETTINGS_PAGE;
+    }
+    DrawTexture(this->last_img, 0, 0, WHITE);
 };
 
 void Window::printCenteredText(const char *text, int fontSize, int xOffset, int yOffset, Font font, float spacing, Color tint)
@@ -355,30 +362,23 @@ std::vector<double> getParams(Window window, char **textFields, int params)
 {
     try
     {
-        // const int count = params;
-        // double p[params];
         std::vector<double> p;
 
         for (int i = 0; i < params; i++)
         {
             p.push_back(stringToDouble(textFields[i]));
         };
-
-        // double params[4];
-
-        // p[0] = stringToDouble(iters.getText());
-        // p[0] = stringToDouble(r.getText());
-        // p[0] = stringToDouble(g.getText());
-        // p[0] = stringToDouble(b.getText());
         return p;
-        // std::cout << stringToDouble(iters.getText()) << std::endl;
-        // std::cout << stringToDouble(r.getText()) << std::endl;
-        // std::cout << stringToDouble(g.getText()) << std::endl;
-        // std::cout << stringToDouble(b.getText()) << std::endl;
     }
     catch (...)
     {
         window.setConversionError();
         return {};
     }
+};
+
+std::string DirectoryFilenameToPNGPath(std::string directory, std::string filename)
+{
+    std::string path = directory + "/" + filename + ".png";
+    return path;
 };

@@ -36,7 +36,7 @@ void MandelbrotGenerator::setPath(std::string directory, std::string filename)
 int MandelbrotGenerator::generate()
 {
     this->img = cv::Mat(this->height, this->width, CV_8UC3, cv::Scalar(0, 0, 0));
-    std::string path = this->directory + "/" + this->filename + ".jpg";
+    std::string path = this->directory + "/" + this->filename + ".png";
 
     MandelbrotSet mbs = MandelbrotSet();
     mbs.setMaxIters(this->iters);

@@ -1,7 +1,6 @@
 #ifndef window_hpp
 #define window_hpp
 
-// #include <raylib.h>
 #include <math.h>
 #include <iostream>
 #include <vector>
@@ -9,7 +8,6 @@
 
 #include "windowelement.hpp"
 #include "mandelbrotgenerator.hpp"
-// #include "portable-file-dialogs.h"
 
 inline const int DEFAULT_SCREEN_WIDTH = 1000;
 inline const int DEFAULT_SCREEN_HEIGHT = 1000;
@@ -37,6 +35,9 @@ private:
     bool create_mandelbrot = false;
     bool conversion_error_dialog = false;
 
+    // std::string last_img;
+    Texture2D last_img;
+
     void HomeScreen();
     void SettingsScreen();
     void ImageScreen();
@@ -47,5 +48,7 @@ private:
 };
 
 std::vector<double> getParams(Window window, char **textFields, int params);
+
+std::string DirectoryFilenameToPNGPath(std::string directory, std::string filename);
 
 #endif
