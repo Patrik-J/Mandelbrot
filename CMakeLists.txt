@@ -25,15 +25,19 @@ set(SOURCE_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/include/lodepng.h"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/lodepng.cpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/include/portable-file-dialogs.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/res/icon.h"
     )
 
 add_executable(${PROJECT_NAME} 
+WIN32
 ${SOURCE_FILES}
+mb.rc
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE 
 "${CMAKE_CURRENT_SOURCE_DIR}/src"
-"${CMAKE_CURRENT_SOURCE_DIR}/include")
+"${CMAKE_CURRENT_SOURCE_DIR}/include"
+"${CMAKE_CURRENT_SOURCE_DIR}/res")
 
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
