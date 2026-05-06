@@ -1,7 +1,8 @@
 #include "src/window.hpp"
 
-int main()
+int WinMain()
 {
-    Window();
+    Window window = Window();
+    window.draw();
     return 0;
 }
