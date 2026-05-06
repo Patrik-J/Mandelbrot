@@ -11,7 +11,8 @@
 
 inline const int DEFAULT_SCREEN_WIDTH = 1000;
 inline const int DEFAULT_SCREEN_HEIGHT = 1000;
-inline const char *test = "Mandelbrot Set Generator";
+inline const char *DEFAULT_TITLE = "Mandelbrot Set Generator";
+inline const char *icon_path = "../icon.h";
 
 #define HOME_PAGE 1
 #define SETTINGS_PAGE 2
@@ -20,7 +21,8 @@ inline const char *test = "Mandelbrot Set Generator";
 class Window
 {
 public:
-    Window(int width = DEFAULT_SCREEN_WIDTH, int height = DEFAULT_SCREEN_HEIGHT, int fps = 60, const char *title = test);
+    Window(int width = DEFAULT_SCREEN_WIDTH, int height = DEFAULT_SCREEN_HEIGHT, int fps = 60, const char *title = DEFAULT_TITLE);
+    void draw();
 
     int getWidth();
     int getHeight();
@@ -34,8 +36,8 @@ private:
     double params[4];
     bool create_mandelbrot = false;
     bool conversion_error_dialog = false;
+    bool icon_load_error_dialog = false;
 
-    // std::string last_img;
     Texture2D last_img;
 
     void HomeScreen();

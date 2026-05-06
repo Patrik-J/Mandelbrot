@@ -1,6 +1,7 @@
 #include "window.hpp"
 
 #include "filedialog.hpp"
+#include "icon.h"
 
 Window::Window(int width, int height, int fps, const char *title)
 {
@@ -11,11 +12,31 @@ Window::Window(int width, int height, int fps, const char *title)
     this->screen_index = HOME_PAGE;
     this->conversion_error_dialog = false;
     this->create_mandelbrot = false;
+    this->icon_load_error_dialog = false;
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(width, height, title);
+    InitWindow(this->width, this->height, this->title);
     SetWindowMinSize(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT);
     SetExitKey(KEY_NULL);
-    SetTargetFPS(fps);
+    SetTargetFPS(this->fps);
+
+    // Image icon = LoadImage(icon_path); // use PNG!
+    Image icon = LoadImageFromMemory(".png", icon_png, 14470);
+
+    if (icon.data != nullptr)
+    {
+        ImageFormat(&icon, PIXELFORMAT_UNCOMPRESSED_R8G8B8A8);
+        SetWindowIcon(icon);
+        UnloadImage(icon);
+    }
+    else
+    {
+        this->icon_load_error_dialog = true;
+    }
+};
+
+void Window::draw()
+{
     while (!WindowShouldClose())
     {
         if (this->create_mandelbrot)
@@ -48,7 +69,6 @@ Window::Window(int width, int height, int fps, const char *title)
         }
         EndDrawing();
     }
-    this->HomeScreen();
     CloseWindow();
 };
 
@@ -57,12 +77,27 @@ void Window::HomeScreen()
     ClearBackground(WHITE);
     this->checkForResize();
 
-    this->printCenteredText("Mandelbrot Set Generator", 40, 0, -int(0.1 * this->height), BLACK);
-    this->printCenteredBlinkingText("Click or press 'Enter'/'Space' to start. :D", 30, 25, 0.8, 0, int(0.1 * this->height), RED);
-
-    if (IsKeyDown(KEY_SPACE) || IsKeyDown(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+    if (this->icon_load_error_dialog)
     {
-        this->screen_index = SETTINGS_PAGE;
+        Rectangle rec{
+            this->width / 2 - DEFAULT_POP_UP_WIDTH / 2,
+            this->height / 2 - DEFAULT_POP_UP_HEIGHT / 2,
+            DEFAULT_POP_UP_WIDTH,
+            DEFAULT_POP_UP_HEIGHT};
+        if (PopUpWindow(rec, "Could not load 'icon.png'.", "Icon Error", ERROR) == 1)
+        {
+            this->icon_load_error_dialog = false;
+        }
+    }
+    else
+    {
+        this->printCenteredText("Mandelbrot Set Generator", 40, 0, -int(0.1 * this->height), BLACK);
+        this->printCenteredBlinkingText("Click or press 'Enter'/'Space' to start. :D", 30, 25, 0.8, 0, int(0.1 * this->height), RED);
+
+        if (IsKeyDown(KEY_SPACE) || IsKeyDown(KEY_ENTER) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
+        {
+            this->screen_index = SETTINGS_PAGE;
+        }
     }
 };
 
