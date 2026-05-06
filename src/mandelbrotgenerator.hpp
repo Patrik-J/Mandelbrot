@@ -1,8 +1,9 @@
 #ifndef mandelbrotgenerator_hpp
 #define mandelbrotgenerator_hpp
 
-#include <opencv2/opencv.hpp>
-#include <opencv2/imgcodecs.hpp>
+#include "lodepng.h"
+// #include <opencv2/opencv.hpp>
+// #include <opencv2/imgcodecs.hpp>
 #include "mandelbrot.hpp"
 #include <string>
 
@@ -28,7 +29,11 @@ private:
     double min_x, max_x;
     double min_y, max_y;
 
-    cv::Mat img;
+    std::vector<unsigned char> png;
+
+    void encode();
+
+    // cv::Mat img;
 };
 
 #endif

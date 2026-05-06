@@ -35,7 +35,8 @@ void MandelbrotGenerator::setPath(std::string directory, std::string filename)
 
 int MandelbrotGenerator::generate()
 {
-    this->img = cv::Mat(this->height, this->width, CV_8UC3, cv::Scalar(0, 0, 0));
+    this->png.resize(this->width * this->height * 4);
+    // this->img = cv::Mat(this->height, this->width, CV_8UC3, cv::Scalar(0, 0, 0));
     std::string path = this->directory + "/" + this->filename + ".png";
 
     MandelbrotSet mbs = MandelbrotSet();
@@ -65,10 +66,24 @@ int MandelbrotGenerator::generate()
                 g = static_cast<int>(iters * this->g) % 256;
                 b = static_cast<int>(iters * this->b) % 256;
             }
-            this->img.at<cv::Vec3b>(j, i) = cv::Vec3b(b, g, r);
+            this->png[4 * this->width * j + 4 * i + 0] = r;
+            this->png[4 * this->width * j + 4 * i + 1] = g;
+            this->png[4 * this->width * j + 4 * i + 2] = b;
+            this->png[4 * this->width * j + 4 * i + 3] = 255;
+
+            // this->img.at<cv::Vec3b>(j, i) = cv::Vec3b(b, g, r);
         }
     }
-    cv::imwrite(path, this->img);
+
+    this->encode();
+    // cv::imwrite(path, this->img);
 
     return 0;
+};
+
+void MandelbrotGenerator::encode()
+{
+    const std::string filename = this->directory + "/" + this->filename + ".png";
+
+    lodepng::encode(filename.c_str(), this->png, this->width, this->height);
 };
